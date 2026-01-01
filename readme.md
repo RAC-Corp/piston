@@ -409,6 +409,7 @@ Errors may return status codes as follows:
 `llvm_ir`,
 `lolcode`,
 `lua`,
+`luau`,
 `matl`,
 `nasm`,
 `nasm64`,

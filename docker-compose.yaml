@@ -12,3 +12,5 @@ services:
             - ./data/piston/packages:/piston/packages
         tmpfs:
             - /tmp:exec
+        env_file:
+            - .env
