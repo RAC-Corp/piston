@@ -1,4 +1,4 @@
-FROM buildpack-deps:bullseye AS isolate
+FROM buildpack-deps:noble AS isolate
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
@@ -11,16 +11,24 @@ RUN git clone https://github.com/envicutor/isolate.git /tmp/isolate && \
     make -j"$(nproc)" install && \
     rm -rf /tmp/isolate
 
-FROM node:16-bullseye-slim
+FROM ubuntu:noble
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN dpkg-reconfigure -p critical dash || true
+
+RUN apt-get update && apt-get install -y ca-certificates curl gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    NODE_MAJOR=20 && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" > /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       libxml2 gnupg tar coreutils util-linux libc6-dev \
       binutils build-essential locales libpcre3-dev libevent-dev libgmp-dev \
-      libncurses6 libncurses5 libedit-dev libseccomp-dev rename procps python3 \
+      libncurses6 libedit-dev libseccomp-dev rename procps python3 \
       libreadline-dev libblas-dev liblapack-dev libarpack2-dev \
       libfftw3-dev libglpk-dev libqhull-dev libqrupdate-dev libsuitesparse-dev \
       libsundials-dev libpcre2-dev libcap-dev ca-certificates && \

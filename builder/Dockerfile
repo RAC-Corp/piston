@@ -1,2 +1,2 @@
-FROM ghcr.io/engineer-man/piston:latest
+FROM buildpack-deps:noble
 ADD . /piston/packages/

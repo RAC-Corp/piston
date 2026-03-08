@@ -1,12 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Put instructions to build your package in here
-curl -R -O -L https://github.com/luau-lang/luau/archive/refs/tags/0.703.tar.gz
-tar -xzf 0.703.tar.gz
-rm 0.703.tar.gz
+git clone https://github.com/luau-lang/luau.git --depth 1
+cd luau
 
-cd luau-0.703
-mkdir build
-cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Release .
 make -j$(nproc)
